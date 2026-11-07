@@ -1,0 +1,21 @@
+# After every new or updated share page, make it pass ?to=<name> on to the card (scripts/keep-query.py).
+name: Keep the name in share links
+on:
+  push:
+    paths: ["p/**"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: keep-query
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/keep-query.py p
+      - run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898233+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Share pages: keep the name in the link"
+          git push
