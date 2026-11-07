@@ -14,8 +14,9 @@ jobs:
       - uses: actions/checkout@v4
       - run: python3 scripts/keep-query.py p
       - run: |
-          if git diff --quiet; then exit 0; fi
+          git add -A p
+          if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898233+github-actions[bot]@users.noreply.github.com"
-          git commit -am "Share pages: keep the name in the link"
+          git commit -m "Share pages: keep the name in the link, mark ready"
           git push
